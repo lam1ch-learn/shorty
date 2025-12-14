@@ -40,15 +40,16 @@ jobs:
       - name: Setup Redis (Windows)
         if: matrix.os == 'windows-latest'
         run: |
-          choco install redis-64 --no-progress
+          Invoke-WebRequest -Uri "https://github.com/microsoftarchive/redis/releases/download/win-3.0.504/Redis-x64-3.0.504.zip" -OutFile "redis.zip"
           
-          $redisPath = (Get-ChildItem "C:\ProgramData\chocolatey\lib\redis-64" -Recurse -Filter "redis-server.exe" | Select-Object -First 1).FullName
-          Write-Host "Running Redis from: $redisPath"
+          Expand-Archive -Path "redis.zip" -DestinationPath "redis_bin"
           
-          & $redisPath --service-install
-          & $redisPath --service-start
+          Write-Host "Starting Redis Server..."
+          cd redis_bin
+          Start-Process -FilePath ".\redis-server.exe" -WindowStyle Hidden
           
           Start-Sleep -s 5
+          Write-Host "Redis started."
         shell: powershell
 
       - name: Build with Maven
