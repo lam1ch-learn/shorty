@@ -40,9 +40,14 @@ jobs:
       - name: Setup Redis (Windows)
         if: matrix.os == 'windows-latest'
         run: |
-          choco install redis-64
-          redis-server --service-install
-          redis-server --service-start
+          choco install redis-64 --no-progress
+          
+          $redisPath = (Get-ChildItem "C:\ProgramData\chocolatey\lib\redis-64" -Recurse -Filter "redis-server.exe" | Select-Object -First 1).FullName
+          Write-Host "Running Redis from: $redisPath"
+          
+          & $redisPath --service-install
+          & $redisPath --service-start
+          
           Start-Sleep -s 5
         shell: powershell
 
