@@ -18,7 +18,7 @@
 
 ```bash
 # Клонировать репозиторий
-git clone <your-repo>
+git clone <https://github.com/lam1ch-learn/shorty.git>
 cd shorty
 
 # Запустить Redis (docker или локально на localhost:6379)
