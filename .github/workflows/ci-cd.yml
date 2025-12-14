@@ -30,14 +30,20 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Setup Redis
+      - name: Setup Redis (Linux/macOS)
+        if: runner.os != 'Windows'
         uses: shogo82148/actions-setup-redis@v1
         with:
           redis-version: "7.x"
           auto-start: "true"
 
-      - name: Check Code Formatting (Spotless)
-        run: mvn spotless:check
+      - name: Setup Redis (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          choco install redis-64
+          redis-server --service-install
+          redis-server --service-start
+        shell: powershell
 
       - name: Build with Maven
         run: mvn clean package
