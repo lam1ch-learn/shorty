@@ -24,7 +24,7 @@ public class RedisStore implements Saveable {
 
 		try (Jedis jedis = new Jedis(AppConfig.REDIS_HOST, AppConfig.REDIS_PORT)) {
 			jedis.del("urlData:" + urlData.getId().toString());
-			jedis.hset("urlData:" + urlData.getId().toString(), map);
+			jedis.hmset("urlData:" + urlData.getId().toString(), map);
 			jedis.set("shortUrl" + urlData.getShortUrl(), urlData.getId().toString());
 			return true;
 		}
