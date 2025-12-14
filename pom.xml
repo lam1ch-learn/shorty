@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jedis.version>5.1.0</jedis.version>
         <junit.version>5.10.1</junit.version>
-        <spotless.version>2.43.0</spotless.version>
+        <spotless.version>2.44.1</spotless.version>
     </properties>
 
     <dependencies>
@@ -36,6 +36,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -53,12 +59,13 @@
             <plugin>
                 <groupId>com.diffplug.spotless</groupId>
                 <artifactId>spotless-maven-plugin</artifactId>
-                <version>${spotless.version}</version>
+                <version>2.44.1</version>
                 <configuration>
-                    <googleJavaFormat>
-                        <version>1.17.0</version>
-                        <style>GOOGLE</style>
-                    </googleJavaFormat>
+                    <java>
+                        <eclipse>
+                            <version>4.31</version>
+                        </eclipse>
+                    </java>
                 </configuration>
                 <executions>
                     <execution>

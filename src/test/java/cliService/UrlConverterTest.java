@@ -45,4 +45,3 @@ class UrlConverterTest {
 		assertEquals("https://test.com", fromStorage.getFullUrl());
 	}
 }
-

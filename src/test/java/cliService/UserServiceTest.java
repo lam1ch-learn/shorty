@@ -15,13 +15,15 @@ class UserServiceTest {
 	@AfterEach
 	void cleanup() {
 		File f = new File(USER_FILE);
-		if (f.exists()) f.delete();
+		if (f.exists())
+			f.delete();
 	}
 
 	@Test
 	void createsNewUserWhenNoFile() {
 		File f = new File(USER_FILE);
-		if (f.exists()) f.delete();
+		if (f.exists())
+			f.delete();
 
 		UserService service = new UserService();
 		User user = service.getCurrentUser();
@@ -39,4 +41,3 @@ class UserServiceTest {
 		assertEquals(user1.getUuid(), user2.getUuid());
 	}
 }
-

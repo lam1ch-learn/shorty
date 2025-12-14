@@ -52,14 +52,14 @@ public class CliCommands {
 
 	private void printMenu() {
 		System.out.println("""
-                Введите команду:
+				Введите команду:
 
-                1. Создать короткую ссылку
-                2. Перейти по короткой ссылке
-                3. Мои ссылки
-                4. Редактировать ссылку
-                5. Удалить ссылку
-                6. Выход""");
+				1. Создать короткую ссылку
+				2. Перейти по короткой ссылке
+				3. Мои ссылки
+				4. Редактировать ссылку
+				5. Удалить ссылку
+				6. Выход""");
 	}
 
 	private void handleCreateShortUrl() {
@@ -187,7 +187,8 @@ public class CliCommands {
 		}
 
 		System.out.println("Текущий лимит: " + (urlData.getLimit() == -1 ? "Неограничен" : urlData.getLimit()));
-		System.out.println("Введите новый лимит переходов (-1 для неограниченного, оставьте пустым для сохранения текущего):");
+		System.out.println(
+				"Введите новый лимит переходов (-1 для неограниченного, оставьте пустым для сохранения текущего):");
 		String newLimitInput = scanner.nextLine();
 		if (!newLimitInput.isEmpty()) {
 			try {
@@ -198,7 +199,9 @@ public class CliCommands {
 			}
 		}
 
-		System.out.println("Текущий TTL: " + (urlData.getTtl() == -1L ? "Бессрочная" : TimeUnit.MILLISECONDS.toDays(urlData.getTtl() - System.currentTimeMillis()) + " дн."));
+		System.out.println("Текущий TTL: " + (urlData.getTtl() == -1L
+				? "Бессрочная"
+				: TimeUnit.MILLISECONDS.toDays(urlData.getTtl() - System.currentTimeMillis()) + " дн."));
 		System.out.println("Введите новый TTL в днях (оставьте пустым для бессрочной, 0 для сохранения текущего):");
 		String newTtlInput = scanner.nextLine();
 		if (!newTtlInput.isEmpty()) {
@@ -210,7 +213,8 @@ public class CliCommands {
 					urlData.setTtl(-1L);
 				} else if (days == 0) {
 				} else {
-					System.out.println("Количество дней должно быть положительным или -1 для бессрочной. TTL не изменен.");
+					System.out.println(
+							"Количество дней должно быть положительным или -1 для бессрочной. TTL не изменен.");
 				}
 			} catch (NumberFormatException e) {
 				System.out.println("Неверный формат TTL. TTL не изменен.");

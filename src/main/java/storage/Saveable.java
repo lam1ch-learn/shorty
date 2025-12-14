@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public interface Saveable {
 
-    public boolean saveUrl(UrlData urlData);
+	public boolean saveUrl(UrlData urlData);
 
-    public UrlData readUrl(String key);
+	public UrlData readUrl(String key);
 
 	public boolean deleteUrl(String key);
 
@@ -17,7 +17,7 @@ public interface Saveable {
 
 	public UrlData findByShortUrl(String shortUrl);
 
-    public ArrayList<UrlData> listUrls();
+	public ArrayList<UrlData> listUrls();
 
-    public  ArrayList<UrlData> listUrlsByUser(User user);
+	public ArrayList<UrlData> listUrlsByUser(User user);
 }

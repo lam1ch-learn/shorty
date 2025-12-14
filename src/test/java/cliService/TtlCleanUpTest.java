@@ -36,4 +36,3 @@ class TtlCleanUpTest {
 		assertTrue(storage.listUrls().isEmpty());
 	}
 }
-

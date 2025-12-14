@@ -36,10 +36,12 @@ public class TtlCleanup {
 
 			if (urlData.getTtl() != -1L && currentTime > urlData.getTtl()) {
 				shouldDelete = true;
-				notificationMessage = "\n[УВЕДОМЛЕНИЕ]: Ваша короткая ссылка '" + urlData.getShortUrl() + "' (полный URL: " + urlData.getFullUrl() + ") просрочена и будет удалена.";
+				notificationMessage = "\n[УВЕДОМЛЕНИЕ]: Ваша короткая ссылка '" + urlData.getShortUrl()
+						+ "' (полный URL: " + urlData.getFullUrl() + ") просрочена и будет удалена.";
 			} else if (urlData.getLimit() != -1 && urlData.getLimit() <= 0) {
 				shouldDelete = true;
-				notificationMessage = "\n[УВЕДОМЛЕНИЕ]: Ваша короткая ссылка '" + urlData.getShortUrl() + "' (полный URL: " + urlData.getFullUrl() + ") исчерпала лимит переходов и будет удалена.";
+				notificationMessage = "\n[УВЕДОМЛЕНИЕ]: Ваша короткая ссылка '" + urlData.getShortUrl()
+						+ "' (полный URL: " + urlData.getFullUrl() + ") исчерпала лимит переходов и будет удалена.";
 			}
 
 			if (shouldDelete) {

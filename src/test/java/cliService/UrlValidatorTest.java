@@ -24,14 +24,10 @@ class UrlValidatorTest {
 	}
 
 	@ParameterizedTest
-	@CsvSource({
-			"google.com, https://google.com",
-			"http://example.com, http://example.com",
-			"https://yandex.ru, https://yandex.ru"
-	})
+	@CsvSource({"google.com, https://google.com", "http://example.com, http://example.com",
+			"https://yandex.ru, https://yandex.ru"})
 	void normalizesUrls(String input, String expected) {
 		String result = UrlValidator.normalizeUrl(input);
 		assertEquals(expected, result);
 	}
 }
-

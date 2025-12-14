@@ -10,7 +10,6 @@ public class UrlValidator {
 			return false;
 		}
 
-		// Простая проверка на базовый формат
 		if (!urlString.contains("://")) {
 			return false;
 		}
@@ -26,15 +25,15 @@ public class UrlValidator {
 		}
 	}
 
-	public static String normalizeUrl(String urlString) {
-		if (!isValidUrl(urlString)) {
-			throw new IllegalArgumentException("Некорректный URL: " + urlString);
+	public static String normalizeUrl(String originalUrl) {
+		if (originalUrl == null || originalUrl.trim().isEmpty()) {
+			throw new IllegalArgumentException("URL не может быть пустым");
 		}
 
-		if (!urlString.contains("://")) {
-			return "https://" + urlString;
+		if (!originalUrl.startsWith("http://") && !originalUrl.startsWith("https://")) {
+			return "https://" + originalUrl;
 		}
-		return urlString;
+
+		return originalUrl;
 	}
 }
-

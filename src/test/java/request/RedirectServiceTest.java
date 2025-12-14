@@ -21,8 +21,7 @@ class RedirectServiceTest {
 
 	@Test
 	void throwsWhenUrlNotFound() {
-		RuntimeException ex = assertThrows(RuntimeException.class,
-				() -> service.redirect("nonexistent"));
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> service.redirect("nonexistent"));
 		assertTrue(ex.getMessage().contains("URL не найден"));
 	}
 
@@ -32,8 +31,7 @@ class RedirectServiceTest {
 		UrlData url = new UrlData("https://test.com", "short.com/limit0", user, 0, -1L);
 		storage.saveUrl(url);
 
-		RuntimeException ex = assertThrows(RuntimeException.class,
-				() -> service.redirect("short.com/limit0"));
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> service.redirect("short.com/limit0"));
 		assertTrue(ex.getMessage().contains("лимит превышен"));
 	}
 
@@ -44,9 +42,7 @@ class RedirectServiceTest {
 		UrlData url = new UrlData("https://test.com", "short.com/expired", user, -1, past);
 		storage.saveUrl(url);
 
-		RuntimeException ex = assertThrows(RuntimeException.class,
-				() -> service.redirect("short.com/expired"));
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> service.redirect("short.com/expired"));
 		assertTrue(ex.getMessage().contains("срок действия истек"));
 	}
 }
-
