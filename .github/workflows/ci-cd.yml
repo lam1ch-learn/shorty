@@ -31,18 +31,19 @@ jobs:
           cache: 'maven'
 
       - name: Setup Redis (Linux/macOS)
-        if: runner.os != 'Windows'
+        if: matrix.os != 'windows-latest'
         uses: shogo82148/actions-setup-redis@v1
         with:
           redis-version: "7.x"
           auto-start: "true"
 
       - name: Setup Redis (Windows)
-        if: runner.os == 'Windows'
+        if: matrix.os == 'windows-latest'
         run: |
           choco install redis-64
           redis-server --service-install
           redis-server --service-start
+          Start-Sleep -s 5
         shell: powershell
 
       - name: Build with Maven
