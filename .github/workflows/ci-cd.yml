@@ -1,125 +1,46 @@
-name: Shorty URL CI/CD Pipeline
+name: Java CI Multi-OS
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ "master", "main" ]
   pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+    branches: [ "master", "main" ]
 
 jobs:
-  build-test:
-    name: Build, Test & Package
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
-    services:
-      redis:
-        image: redis:alpine
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+    runs-on: ${{ matrix.os }}
 
     steps:
-      - name: 📥 Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: ☕ Setup Java 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
           java-version: '17'
+          distribution: 'temurin'
           cache: 'maven'
 
-      - name: Cache Maven packages
-        uses: actions/cache@v4
+      - name: Setup Redis
+        uses: shogo82148/actions-setup-redis@v1
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          redis-version: "7.x"
+          auto-start: "true"
 
-      - name: Validate Maven wrapper
-        uses: maven-wrappers/validate-maven-wrapper-action@v0.1.0
-
-      - name: Run Tests
-        run: mvn -B test --file pom.xml
-
-      - name: Build JAR
-        run: mvn -B package -DskipTests --file pom.xml
-
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: |
-            target/surefire-reports/
-            target/site/
-
-      - name: Upload JAR Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: shorty-url-jar
-          path: target/*.jar
-
-  quality-check:
-    name: Code Quality
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
-
-      - name: 📏 Spotless (code style)
+      - name: Check Code Formatting
         run: mvn spotless:check
 
-      - name: ✅ Checkstyle
-        run: mvn checkstyle:check
+      - name: Build with Maven
+        run: mvn clean package
 
-  deploy-jar:
-    name: Deploy JAR
-    needs: [build-test, quality-check]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: 📥 Download JAR
-        uses: actions/download-artifact@v4
+      - name: Upload JAR
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
         with:
-          name: shorty-url-jar
-          path: dist/
-
-      - name: 📤 Release JAR
-        uses: softprops/action-gh-release@v2
-        if: github.event_name == 'push' && contains(github.event.head_commit.message, 'release')
-        with:
-          files: dist/*.jar
-          tag_name: v${{ github.run_number }}
-          name: Shorty URL v${{ github.run_number }}
-          body: |
-            ## Shorty URL Release
-            - All tests passed
-            - Code quality OK
-            - JAR ready for deployment
-
-  summary:
-    name: Build Summary
-    needs: [build-test, quality-check, deploy-jar]
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: 📈 Status Summary
-        run: |
-          echo "CI/CD Pipeline Status:"
-          echo "- Build & Tests: ${{ needs.build-test.result }}"
-          echo "- Code Quality: ${{ needs.quality-check.result }}"
-          echo "- Deploy: ${{ needs.deploy-jar.result || 'skipped' }}"
-          echo "Pipeline ${{ job.status }}!"
-  
+          name: shorty-jar
+          path: target/shorty-1.0-SNAPSHOT.jar
