@@ -32,6 +32,33 @@ java -jar target/shorty-1.0-SNAPSHOT.jar
 
 ```
 
+## 🧪 Запуск тестов
+
+### Предварительные требования
+- **Java 17** установлена
+- **Maven 3.8+** установлен
+- **Redis** запущен на `localhost:6379`
+
+### Запуск всех тестов
+```bash
+mvn clean test
+
+```
+### Запуск тестов конкретного класса
+```bash
+mvn test -Dtest=UserServiceTest
+
+```
+
+## Структура тестов
+### Тесты расположены в src/test/java/ и включают:
+
+* UserServiceTest — тесты управления пользователями
+* UrlValidatorTest — тесты валидации URL
+* UrlConverterTest — тесты генерации коротких ссылок
+* TtlCleanUpTest — тесты очистки просроченных ссылок
+* RedisStoreTest — тесты работы с Redis хранилищем
+* RedirectServiceTest — тесты редиректа по коротким ссылкам
 ### CI/CD (GitHub Actions)
 
 *   **Автоматическая сборка/тесты** при push/PR
